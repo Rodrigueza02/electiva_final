@@ -1,0 +1,200 @@
+<div class="register-layout">
+  <aside class="register-hero">
+    <div class="register-hero__content">
+      <h1 class="register-hero__brand">
+        <span>Smart</span><strong>ParkU</strong>
+      </h1>
+      <p class="register-hero__intro">
+        Crea tu cuenta y reserva tu puesto en el campus UCC.
+      </p>
+
+      <ol class="register-steps">
+        <li><strong>1.</strong> Regístrate con tu correo institucional</li>
+        <li><strong>2.</strong> Registra tu vehículo</li>
+        <li><strong>3.</strong> Ocupa o reserva un puesto en tiempo real</li>
+      </ol>
+    </div>
+
+    <footer class="register-hero__footer">
+      UNIVERSIDAD COOPERATIVA DE COLOMBIA — PASTO
+    </footer>
+  </aside>
+
+  <main class="register-panel">
+    <section class="register-card" aria-labelledby="register-title">
+      <header class="register-card__header">
+        <h2 id="register-title">Crear cuenta</h2>
+        <p>Completa tus datos de estudiante UCC</p>
+      </header>
+
+      @if (errorMsg()) {
+        <div class="register-alert" role="alert">{{ errorMsg() }}</div>
+      }
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="register-grid">
+          <div class="register-field register-field--full">
+            <label for="fullName">Nombre completo</label>
+            <input
+              id="fullName"
+              type="text"
+              formControlName="fullName"
+              autocomplete="name"
+              placeholder="Nombres y apellidos"
+            />
+            @if (isInvalid('fullName')) {
+              <small>Escribe tu nombre completo.</small>
+            }
+          </div>
+
+          <div class="register-field register-field--full">
+            <label for="email">Correo institucional</label>
+            <input
+              id="email"
+              type="text"
+              inputmode="email"
+              autocapitalize="none"
+              formControlName="email"
+              autocomplete="email"
+              placeholder="ejemplo@campusucc.edu.co"
+            />
+            @if (isInvalid('email')) {
+              <small>Usa un correo institucional válido de la UCC.</small>
+            }
+          </div>
+
+          <div class="register-field">
+            <label for="studentCode">Código estudiantil</label>
+            <input
+              id="studentCode"
+              type="text"
+              formControlName="studentCode"
+              inputmode="numeric"
+              maxlength="6"
+              placeholder="123456"
+              (input)="onlyNumbers($event)"
+            />
+            @if (isInvalid('studentCode')) {
+              <small>El código debe tener exactamente 6 dígitos numéricos.</small>
+            }
+          </div>
+
+          <div class="register-field">
+            <label for="phone">Teléfono</label>
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              autocomplete="tel"
+              inputmode="numeric"
+              placeholder="3001234567"
+            />
+            @if (isInvalid('phone')) {
+              <small>Ingresa un teléfono de 10 dígitos.</small>
+            }
+          </div>
+
+          <div class="register-field">
+            <label for="program">Programa</label>
+            <input
+              id="program"
+              type="text"
+              formControlName="program"
+              placeholder="Ingeniería de Sistemas"
+            />
+            @if (isInvalid('program')) {
+              <small>Indica tu programa académico.</small>
+            }
+          </div>
+
+          <div class="register-field">
+            <label for="semester">Semestre</label>
+            <input
+              id="semester"
+              type="number"
+              formControlName="semester"
+              min="1"
+              max="10"
+            />
+            @if (isInvalid('semester')) {
+              <small>El semestre debe estar entre 1 y 10.</small>
+            }
+          </div>
+
+          <div class="register-field">
+            <label for="password">Contraseña</label>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              autocomplete="new-password"
+              placeholder="Mínimo 8 caracteres"
+            />
+            @if (isInvalid('password')) {
+              <small>La contraseña debe tener al menos 8 caracteres.</small>
+            }
+          </div>
+
+          <div class="register-field">
+            <label for="confirmPassword">Confirmar contraseña</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              autocomplete="new-password"
+              placeholder="Repite tu contraseña"
+            />
+            @if (isInvalid('confirmPassword') && !hasPasswordMismatch()) {
+              <small>Confirma tu contraseña.</small>
+            }
+            @if (hasPasswordMismatch()) {
+              <small>Las contraseñas no coinciden.</small>
+            }
+          </div>
+
+          <div class="register-field">
+            <label for="vehiclePlate">Placa del vehículo</label>
+            <input
+              id="vehiclePlate"
+              type="text"
+              formControlName="vehiclePlate"
+              autocapitalize="characters"
+              placeholder="ABC123"
+              style="text-transform: uppercase"
+              (input)="toUpperPlate($event)"
+            />
+            @if (isInvalid('vehiclePlate')) {
+              <small>Ingresa una placa válida de 5 a 8 caracteres.</small>
+            }
+          </div>
+
+          <div class="register-field">
+            <label for="vehicleType">Tipo</label>
+            <select id="vehicleType" formControlName="vehicleType">
+              <option value="car">Carro</option>
+              <option value="motorcycle">Moto</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="register-terms">
+          <label>
+            <input type="checkbox" formControlName="acceptTerms" />
+            <span>Acepto los términos y el tratamiento de datos de la UCC</span>
+          </label>
+          @if (isInvalid('acceptTerms')) {
+            <small>Debes aceptar los términos para continuar.</small>
+          }
+        </div>
+
+        <button class="register-submit" type="submit" [disabled]="loading()">
+          {{ loading() ? 'Creando cuenta...' : 'Crear cuenta' }}
+        </button>
+      </form>
+
+      <p class="register-card__footer">
+        ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+      </p>
+    </section>
+  </main>
+</div>
