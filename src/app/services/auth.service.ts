@@ -1,17 +1,29 @@
 import { Injectable, signal, computed } from '@angular/core';
 
+export type UserRole = 'admin' | 'student';
+
 export interface AuthUser {
   email: string;
   name: string;
-  role: 'admin' | 'operator';
+  role: UserRole;
   /** Optional photo URL — falls back to initials avatar */
   photoUrl?: string;
 }
 
 // Demo credentials — replace with a real backend call in production
 const DEMO_USERS: Array<AuthUser & { password: string }> = [
-  { email: 'admin@ucc.edu.co',    password: 'admin123', name: 'Administrador UCC', role: 'admin' },
-  { email: 'operador@ucc.edu.co', password: 'op123',    name: 'Operador Parqueo',  role: 'operator' },
+  {
+    email:    'admin@ucc.edu.co',
+    password: 'admin123',
+    name:     'Administrador UCC',
+    role:     'admin',
+  },
+  {
+    email:    'estudiante@campusucc.edu.co',
+    password: 'est123',
+    name:     'Estudiante UCC',
+    role:     'student',
+  },
 ];
 
 const SESSION_KEY = 'spu-session';
@@ -22,6 +34,8 @@ export class AuthService {
 
   readonly user       = this._user.asReadonly();
   readonly isLoggedIn = computed(() => this._user() !== null);
+  readonly isAdmin    = computed(() => this._user()?.role === 'admin');
+  readonly isStudent  = computed(() => this._user()?.role === 'student');
 
   login(email: string, password: string): boolean {
     const found = DEMO_USERS.find(

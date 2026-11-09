@@ -1,0 +1,326 @@
+<div class="sp-page">
+
+  <!-- ══ TOP BAR ═══════════════════════════════════════════════════════════ -->
+  <header class="sp-topbar">
+    <div class="sp-topbar__brand">
+      <span class="logo-smart">Smart</span><span class="logo-park">Park</span><span class="logo-u">U</span>
+    </div>
+    <div class="sp-topbar__right">
+      <a routerLink="/profile" class="sp-topbar__profile" title="Mi perfil">
+        <span class="sp-avatar">{{ user()?.name?.charAt(0) }}</span>
+        <span class="sp-topbar__name">{{ user()?.name }}</span>
+      </a>
+      <button class="btn btn--ghost btn--sm" (click)="logout()">Salir</button>
+    </div>
+  </header>
+
+  <!-- ══ SUMMARY PILLS ══════════════════════════════════════════════════════ -->
+  <div class="sp-pills">
+    <div class="sp-pill sp-pill--total">
+      <span class="sp-pill__val">{{ summary().total }}</span>
+      <span class="sp-pill__lbl">Total</span>
+    </div>
+    <div class="sp-pill sp-pill--available">
+      <span class="sp-pill__val">{{ summary().available }}</span>
+      <span class="sp-pill__lbl">Disponibles</span>
+    </div>
+    <div class="sp-pill sp-pill--occupied">
+      <span class="sp-pill__val">{{ summary().occupied }}</span>
+      <span class="sp-pill__lbl">Ocupados</span>
+    </div>
+    <div class="sp-pill sp-pill--reserved">
+      <span class="sp-pill__val">{{ summary().reserved }}</span>
+      <span class="sp-pill__lbl">Reservados</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       VIEW: MAP
+  ══════════════════════════════════════════════════════════════════════════ -->
+  @if (view() === 'map') {
+    <section class="sp-section">
+      <div class="sp-section__header">
+        <h2 class="sp-section__title">🗺 Mapa del parqueadero</h2>
+        <p class="sp-section__subtitle">Selecciona un puesto disponible para ingresar</p>
+      </div>
+
+      <!-- Parking lot visual map -->
+      <div class="parking-lot">
+
+        <!-- Legend -->
+        <div class="parking-legend">
+          <span class="legend-item"><span class="legend-dot legend-dot--available"></span>Disponible</span>
+          <span class="legend-item"><span class="legend-dot legend-dot--occupied"></span>Ocupado</span>
+          <span class="legend-item"><span class="legend-dot legend-dot--reserved"></span>Reservado</span>
+          <span class="legend-item"><span class="legend-dot legend-dot--selected"></span>Seleccionado</span>
+        </div>
+
+        <!-- Road & entrance -->
+        <div class="parking-entrance">
+          <span class="parking-entrance__label">⬆ ENTRADA / SALIDA</span>
+        </div>
+
+        <!-- Spot rows -->
+        <div class="parking-rows">
+          <!-- Row A -->
+          <div class="parking-row">
+            <span class="row-label">A</span>
+            <div class="parking-spots">
+              @for (spot of mapRows()[0]; track spot.id) {
+                <button
+                  class="parking-spot"
+                  [class.parking-spot--available]="spot.status === 'available'"
+                  [class.parking-spot--occupied]="spot.status === 'occupied'"
+                  [class.parking-spot--reserved]="spot.status === 'reserved'"
+                  [class.parking-spot--selected]="selectedSpot()?.id === spot.id"
+                  [disabled]="spot.status !== 'available'"
+                  (click)="selectSpot(spot)"
+                  [attr.aria-label]="'Puesto ' + spot.spotNumber + ' ' + spot.status"
+                  [title]="spot.spotNumber + (spot.vehiclePlate ? ' — ' + spot.vehiclePlate : '')"
+                >
+                  <span class="parking-spot__number">{{ spot.spotNumber }}</span>
+                  @if (spot.status === 'occupied') {
+                    <span class="parking-spot__car">🚗</span>
+                  }
+                  @if (spot.status === 'reserved') {
+                    <span class="parking-spot__car">🔒</span>
+                  }
+                  @if (spot.status === 'available') {
+                    <span class="parking-spot__car">✓</span>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Drive lane -->
+          <div class="drive-lane">
+            <div class="drive-lane__line"></div>
+            <span class="drive-lane__label">↔ CARRIL</span>
+            <div class="drive-lane__line"></div>
+          </div>
+
+          <!-- Row B -->
+          <div class="parking-row">
+            <span class="row-label">B</span>
+            <div class="parking-spots">
+              @for (spot of mapRows()[1]; track spot.id) {
+                <button
+                  class="parking-spot"
+                  [class.parking-spot--available]="spot.status === 'available'"
+                  [class.parking-spot--occupied]="spot.status === 'occupied'"
+                  [class.parking-spot--reserved]="spot.status === 'reserved'"
+                  [class.parking-spot--selected]="selectedSpot()?.id === spot.id"
+                  [disabled]="spot.status !== 'available'"
+                  (click)="selectSpot(spot)"
+                  [attr.aria-label]="'Puesto ' + spot.spotNumber + ' ' + spot.status"
+                  [title]="spot.spotNumber + (spot.vehiclePlate ? ' — ' + spot.vehiclePlate : '')"
+                >
+                  <span class="parking-spot__number">{{ spot.spotNumber }}</span>
+                  @if (spot.status === 'occupied') {
+                    <span class="parking-spot__car">🚗</span>
+                  }
+                  @if (spot.status === 'reserved') {
+                    <span class="parking-spot__car">🔒</span>
+                  }
+                  @if (spot.status === 'available') {
+                    <span class="parking-spot__car">✓</span>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- No spots available -->
+        @if (summary().available === 0) {
+          <div class="parking-full">
+            <span>😔</span>
+            <p>No hay puestos disponibles en este momento.</p>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       VIEW: FORM (registro de ingreso)
+  ══════════════════════════════════════════════════════════════════════════ -->
+  @if (view() === 'form') {
+    <section class="sp-section sp-section--form">
+
+      <button class="sp-back" (click)="backToMap()">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M13 16l-6-6 6-6" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Volver al mapa
+      </button>
+
+      <!-- Selected spot preview -->
+      <div class="selected-preview">
+        <div class="selected-preview__spot">{{ selectedSpot()?.spotNumber }}</div>
+        <div class="selected-preview__info">
+          <span class="selected-preview__label">Puesto seleccionado</span>
+          <span class="selected-preview__qr">QR: {{ selectedSpot()?.qrCode }}</span>
+        </div>
+        <span class="badge-available">Disponible</span>
+      </div>
+
+      <div class="sp-section__header">
+        <h2 class="sp-section__title">📋 Registrar ingreso</h2>
+        <p class="sp-section__subtitle">
+          Confirma tu vehículo y escanea el código QR del puesto
+        </p>
+      </div>
+
+      <form [formGroup]="entryForm" (ngSubmit)="confirmEntry()" novalidate class="entry-form">
+
+        <!-- Plate -->
+        <div class="form-field" [class.form-field--error]="isFieldInvalid('plate')">
+          <label class="form-label" for="plate">Placa del vehículo</label>
+          <div class="form-input-wrap">
+            <span class="form-input-icon">🚗</span>
+            <input
+              id="plate"
+              class="form-input"
+              type="text"
+              formControlName="plate"
+              placeholder="Ej. ABC123"
+              autocomplete="off"
+              style="text-transform:uppercase"
+            />
+          </div>
+          @if (isFieldInvalid('plate')) {
+            <span class="form-error">Ingresa una placa válida (3–8 caracteres).</span>
+          }
+          @if (profile()?.vehicles?.length) {
+            <div class="vehicle-chips">
+              @for (v of profile()!.vehicles; track v.id) {
+                <button
+                  type="button"
+                  class="vehicle-chip"
+                  [class.vehicle-chip--active]="entryForm.get('plate')?.value?.toUpperCase() === v.plate"
+                  (click)="entryForm.get('plate')?.setValue(v.plate)"
+                >
+                  {{ v.plate }} @if (v.isDefault) { ⭐ }
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- QR Code -->
+        <div class="form-field" [class.form-field--error]="isFieldInvalid('qrCode')">
+          <label class="form-label" for="qrCode">Código QR del puesto</label>
+          <div class="form-input-wrap">
+            <span class="form-input-icon">&#9641;</span>
+            <input
+              id="qrCode"
+              class="form-input"
+              type="text"
+              formControlName="qrCode"
+              placeholder="Escanea el QR del puesto"
+              autocomplete="off"
+            />
+          </div>
+          @if (isFieldInvalid('qrCode')) {
+            @if (entryForm.get('qrCode')?.errors?.['mismatch']) {
+              <span class="form-error">El QR no coincide con el puesto seleccionado.</span>
+            } @else {
+              <span class="form-error">El código QR es obligatorio.</span>
+            }
+          }
+          <span class="form-hint">
+            💡 El QR ya fue cargado automáticamente. Solo confirma o escanea físicamente.
+          </span>
+        </div>
+
+        <button type="submit" class="btn-entry">
+          <span>✅ Confirmar ingreso al puesto {{ selectedSpot()?.spotNumber }}</span>
+        </button>
+
+      </form>
+    </section>
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       VIEW: SUCCESS (confirmación)
+  ══════════════════════════════════════════════════════════════════════════ -->
+  @if (view() === 'success') {
+    <section class="sp-section sp-section--success">
+
+      <!-- Animated checkmark -->
+      <div class="success-icon">
+        <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <circle cx="40" cy="40" r="38" stroke="var(--brand-teal)" stroke-width="3"
+                  fill="color-mix(in srgb, var(--brand-teal) 10%, transparent)"/>
+          <path d="M22 40l12 13 24-26" stroke="var(--brand-teal)" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round"
+                class="check-path"/>
+        </svg>
+      </div>
+
+      <h2 class="success-title">¡Ingreso registrado!</h2>
+      <p class="success-sub">Tu vehículo ha sido registrado exitosamente en el sistema.</p>
+
+      <!-- Ticket card -->
+      <div class="ticket">
+        <div class="ticket__header">
+          <span class="ticket__logo">
+            <span class="logo-smart">Smart</span><span class="logo-park">Park</span><span class="logo-u">U</span>
+          </span>
+          <span class="ticket__tag">Comprobante de ingreso</span>
+        </div>
+
+        <div class="ticket__body">
+          <div class="ticket__row">
+            <span class="ticket__lbl">Puesto</span>
+            <span class="ticket__val ticket__val--big">{{ confirmedSpot()?.spotNumber }}</span>
+          </div>
+          <div class="ticket__divider"></div>
+          <div class="ticket__row">
+            <span class="ticket__lbl">Vehículo</span>
+            <span class="ticket__val">{{ confirmedSpot()?.vehiclePlate }}</span>
+          </div>
+          <div class="ticket__row">
+            <span class="ticket__lbl">Hora de ingreso</span>
+            <span class="ticket__val">{{ formatTime(entryTimestamp()) }}</span>
+          </div>
+          <div class="ticket__row">
+            <span class="ticket__lbl">Fecha</span>
+            <span class="ticket__val">{{ formatDate(entryTimestamp()) }}</span>
+          </div>
+          <div class="ticket__row">
+            <span class="ticket__lbl">Estudiante</span>
+            <span class="ticket__val">{{ user()?.name }}</span>
+          </div>
+          <div class="ticket__row">
+            <span class="ticket__lbl">Correo</span>
+            <span class="ticket__val">{{ user()?.email }}</span>
+          </div>
+        </div>
+
+        <div class="ticket__footer">
+          <div class="ticket__qr-block">
+            <span class="ticket__qr-icon">&#9641;</span>
+            <span class="ticket__qr-text">{{ confirmedSpot()?.qrCode }}</span>
+          </div>
+          <span class="ticket__campus">Universidad Cooperativa de Colombia — Pasto</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="success-actions">
+        <button class="btn btn--danger" (click)="releaseMySpot()">
+          🚪 Liberar puesto (salida)
+        </button>
+        <a routerLink="/profile" class="btn btn--outline">
+          Ver mi historial
+        </a>
+      </div>
+
+    </section>
+  }
+
+</div>

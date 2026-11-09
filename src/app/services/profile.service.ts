@@ -5,8 +5,7 @@ import {
   StudentVehicle,
   VehicleType,
   createEmptyProfile,
-} from '../models/student-profile.model';
-import { AuthService } from './auth.service';
+} from '../models/student-profile.model';import { AuthService } from './auth.service';
 
 const STORAGE_KEY = 'spu-profiles';
 
@@ -68,21 +67,21 @@ function buildSeedProfiles(): Record<string, StudentProfile> {
         },
       ],
     },
-    'operador@ucc.edu.co': {
-      userId: 'operador@ucc.edu.co',
-      code: '2022-05-0188',
-      program: 'Administración de Empresas',
-      semester: 6,
+    'estudiante@campusucc.edu.co': {
+      userId: 'estudiante@campusucc.edu.co',
+      code: '2024-03-0312',
+      program: 'Ingeniería de Sistemas',
+      semester: 4,
       campus: 'Pasto',
-      phone: '3109876543',
-      avatarInitials: 'OP',
+      phone: '3115559876',
+      avatarInitials: 'EU',
       vehicles: [
         {
-          id: 'v-003',
-          plate: 'XYZ789',
-          brand: 'Chevrolet',
-          model: 'Spark',
-          color: 'Blanco',
+          id: 'v-004',
+          plate: 'EST001',
+          brand: 'Renault',
+          model: 'Sandero',
+          color: 'Rojo',
           type: 'car',
           isDefault: true,
         },
@@ -145,7 +144,7 @@ export class ProfileService {
       ...map,
       [user.email]: {
         ...map[user.email],
-        vehicles: map[user.email].vehicles.filter((v) => v.id !== id),
+        vehicles: map[user.email].vehicles.filter((v: StudentVehicle) => v.id !== id),
       },
     }));
     this.persist();
@@ -158,7 +157,7 @@ export class ProfileService {
       ...map,
       [user.email]: {
         ...map[user.email],
-        vehicles: map[user.email].vehicles.map((v) => ({
+        vehicles: map[user.email].vehicles.map((v: StudentVehicle) => ({
           ...v,
           isDefault: v.id === id,
         })),
