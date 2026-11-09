@@ -30,21 +30,12 @@
   gap: var(--space-3);
 }
 
-.dashboard__brand-icon {
-  font-size: 2.4rem;
-  line-height: 1;
-}
-
-.dashboard__title {
-  font-size: 1.75rem;
-  font-weight: 800;
-  margin: 0;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-
-  span.smart { color: var(--brand-green); }
-  span.park  { color: var(--brand-blue); }
-  span.u     { color: var(--brand-blue); }
+.dashboard__brand-logo {
+  display: block;
+  width: 160px;
+  height: auto;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
 }
 
 .dashboard__subtitle {
