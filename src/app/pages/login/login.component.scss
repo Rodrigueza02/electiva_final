@@ -1,0 +1,363 @@
+// ── Layout ────────────────────────────────────────────────────────────────────
+.login-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100dvh;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Left hero ─────────────────────────────────────────────────────────────────
+.login-hero {
+  background: var(--gradient-hero);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-7) var(--space-6);
+  color: var(--text-on-dark);
+  position: relative;
+  overflow: hidden;
+
+  // Decorative circles
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  &::before { width: 400px; height: 400px; bottom: -150px; right: -100px; }
+  &::after  { width: 260px; height: 260px; top: -80px;    left:  -80px;  }
+
+  @media (max-width: 768px) { display: none; }
+
+  &__illustration svg {
+    width: 100%;
+    max-width: 280px;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
+  }
+
+  &__brand { text-align: center; }
+
+  &__logo {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-2);
+  }
+
+  &__tagline {
+    font-size: 1rem;
+    opacity: 0.85;
+    font-weight: 400;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 380px;
+  }
+
+  &__footer {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    position: absolute;
+    bottom: var(--space-5);
+  }
+}
+
+// ── Hero stat cards ───────────────────────────────────────────────────────────
+.hero-stat {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-4);
+  backdrop-filter: blur(8px);
+
+  &__value {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  &__label {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.75;
+    margin-top: var(--space-1);
+  }
+}
+
+// ── Logo colours (shared across hero & card) ──────────────────────────────────
+.logo-smart { color: #4CAF50; }
+.logo-park  { color: #fff; }
+.logo-u     { color: #fff; }
+
+// In the right panel the text is dark
+.login-card {
+  .logo-park { color: var(--brand-blue); }
+  .logo-u    { color: var(--brand-blue); }
+}
+
+// ── Right panel ───────────────────────────────────────────────────────────────
+.login-panel {
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-5);
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────────
+.login-card {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-7) var(--space-6);
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+
+  @media (max-width: 480px) {
+    padding: var(--space-5) var(--space-4);
+    border-radius: var(--radius-lg);
+  }
+
+  &__brand { text-align: center; }
+
+  &__logo {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-1);
+  }
+
+  &__tagline {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+
+  &__divider {
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-green), var(--brand-teal));
+    border-radius: var(--radius-pill);
+    margin: var(--space-4) auto 0;
+  }
+
+  &__footer {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-top: var(--space-2);
+
+    a {
+      color: var(--brand-blue);
+      font-weight: 600;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
+// ── Error alert ───────────────────────────────────────────────────────────────
+.login-alert {
+  background: #fdecea;
+  color: #c62828;
+  border: 1px solid #f5c6c2;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+// ── Form ──────────────────────────────────────────────────────────────────────
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.lf-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.lf-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.lf-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+
+  .lf-field--error & { border-color: #ef5350; }
+
+  &:focus-within {
+    border-color: var(--brand-teal);
+    box-shadow: 0 0 0 3px rgba(45, 184, 122, 0.18);
+  }
+}
+
+.lf-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-left: var(--space-3);
+  color: var(--text-muted);
+}
+
+.lf-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: var(--space-3) var(--space-3);
+  font-size: 0.92rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  outline: none;
+
+  &::placeholder { color: var(--text-muted); }
+}
+
+.lf-eye {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2) var(--space-3);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+  &:hover { color: var(--brand-teal); }
+
+  svg { width: 18px; height: 18px; }
+}
+
+.lf-error {
+  font-size: 0.76rem;
+  color: #ef5350;
+  font-weight: 500;
+}
+
+// ── Community row ─────────────────────────────────────────────────────────────
+.lf-community {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--surface-alt);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  flex-wrap: wrap;
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex: 1;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    strong { color: var(--text-primary); }
+  }
+
+  &__icon { font-size: 1.2rem; }
+}
+
+.lf-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--brand-teal);
+  border-radius: var(--radius-pill);
+  padding: 3px 8px 3px 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  min-width: 60px;
+
+  &__thumb {
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    flex-shrink: 0;
+  }
+}
+
+.lf-forgot {
+  font-size: 0.8rem;
+  color: var(--brand-blue);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  &:hover { text-decoration: underline; }
+}
+
+// ── Submit button ─────────────────────────────────────────────────────────────
+.lf-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  background: linear-gradient(135deg, #3da85a, #2db87a);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(45, 184, 122, 0.4);
+  transition: filter 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+  letter-spacing: 0.01em;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.07);
+    box-shadow: 0 6px 22px rgba(45, 184, 122, 0.5);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) { transform: translateY(0); }
+
+  &:disabled { opacity: 0.65; cursor: not-allowed; }
+}
+
+// ── Loading spinner ───────────────────────────────────────────────────────────
+.lf-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
