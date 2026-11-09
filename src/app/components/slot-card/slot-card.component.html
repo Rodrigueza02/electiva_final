@@ -1,0 +1,44 @@
+<article class="slot-card" [attr.data-status]="spot().status">
+  <!-- Header -->
+  <header class="slot-card__header">
+    <span class="slot-card__number">{{ spot().spotNumber }}</span>
+    <span class="slot-card__badge slot-card__badge--{{ spot().status }}">
+      {{ statusLabel }}
+    </span>
+  </header>
+
+  <!-- QR code row -->
+  <div class="slot-card__qr">
+    <span class="slot-card__qr-icon">&#9641;</span>
+    <span class="slot-card__qr-code">{{ spot().qrCode }}</span>
+  </div>
+
+  <!-- Vehicle info (only when occupied) -->
+  @if (spot().status === 'occupied') {
+    <div class="slot-card__info">
+      <div class="slot-card__info-row">
+        <span class="slot-card__info-label">Placa</span>
+        <span class="slot-card__info-value">{{ spot().vehiclePlate }}</span>
+      </div>
+      <div class="slot-card__info-row">
+        <span class="slot-card__info-label">Ingreso</span>
+        <span class="slot-card__info-value">{{ formattedEntry }}</span>
+      </div>
+    </div>
+  }
+
+  <!-- Actions -->
+  <footer class="slot-card__actions">
+    @if (spot().status === 'available') {
+      <button class="btn btn--primary" (click)="onOccupy()">Ocupar</button>
+      <button class="btn btn--outline" (click)="onReserve()">Reservar</button>
+    }
+    @if (spot().status === 'occupied') {
+      <button class="btn btn--danger" (click)="onRelease()">Liberar</button>
+    }
+    @if (spot().status === 'reserved') {
+      <button class="btn btn--primary" (click)="onOccupy()">Ocupar</button>
+      <button class="btn btn--ghost"   (click)="onRelease()">Cancelar reserva</button>
+    }
+  </footer>
+</article>
