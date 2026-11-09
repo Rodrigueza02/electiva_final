@@ -54,6 +54,28 @@ export class AuthService {
     try { localStorage.removeItem(SESSION_KEY); } catch { /* noop */ }
   }
 
+  /** Registra un nuevo estudiante — retorna 'created' | 'email-exists' | 'error' */
+  async registerStudent(
+    name: string,
+    email: string,
+    password: string
+  ): Promise<'created' | 'email-exists' | 'error'> {
+    try {
+      const raw = localStorage.getItem('spu-registered-users');
+      const users: Array<AuthUser & { password: string }> = raw ? JSON.parse(raw) : [];
+      if (users.some((u) => u.email === email)) return 'email-exists';
+      const newUser: AuthUser & { password: string } = {
+        email, name, role: 'student', password,
+      };
+      users.push(newUser);
+      localStorage.setItem('spu-registered-users', JSON.stringify(users));
+      const { password: _pw, ...authUser } = newUser;
+      this._user.set(authUser);
+      localStorage.setItem(SESSION_KEY, JSON.stringify(authUser));
+      return 'created';
+    } catch { return 'error'; }
+  }
+
   private loadSession(): AuthUser | null {
     try {
       const raw = localStorage.getItem(SESSION_KEY);
