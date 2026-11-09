@@ -1,0 +1,139 @@
+<div class="dashboard">
+
+  <!-- ── Top bar ──────────────────────────────────────────────────────────── -->
+  <header class="dashboard__topbar">
+    <div class="dashboard__brand">
+      <span class="dashboard__brand-icon">🅿</span>
+      <div>
+        <h1 class="dashboard__title">
+          <span class="smart">Smart</span><span class="park">Park</span><span class="u">U</span>
+        </h1>
+        <p class="dashboard__subtitle">Gestor de puestos de parqueo</p>
+      </div>
+    </div>
+
+    <div class="dashboard__user">
+      @if (currentUser()) {
+        <a routerLink="/profile" class="dashboard__user-name" title="Ver perfil">
+          <span class="dashboard__avatar">{{ currentUser()!.name.charAt(0) }}</span>
+          {{ currentUser()!.name }}
+        </a>
+      }
+      <button class="btn btn--outline" (click)="logout()">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <!-- ── Summary cards ─────────────────────────────────────────────────────── -->
+  <section class="dashboard__summary" aria-label="Resumen de puestos">
+    <div class="summary-card summary-card--total">
+      <span class="summary-card__value">{{ summary().total }}</span>
+      <span class="summary-card__label">Total</span>
+    </div>
+    <div class="summary-card summary-card--available">
+      <span class="summary-card__value">{{ summary().available }}</span>
+      <span class="summary-card__label">Disponibles</span>
+    </div>
+    <div class="summary-card summary-card--occupied">
+      <span class="summary-card__value">{{ summary().occupied }}</span>
+      <span class="summary-card__label">Ocupados</span>
+    </div>
+    <div class="summary-card summary-card--reserved">
+      <span class="summary-card__value">{{ summary().reserved }}</span>
+      <span class="summary-card__label">Reservados</span>
+    </div>
+  </section>
+
+  <!-- ── Filter bar ─────────────────────────────────────────────────────────── -->
+  <div class="dashboard__filters" role="group" aria-label="Filtrar por estado">
+    @for (f of filters; track f.value) {
+      <button
+        class="filter-btn"
+        [class.filter-btn--active]="activeFilter() === f.value"
+        (click)="setFilter(f.value)"
+      >
+        {{ f.label }}
+      </button>
+    }
+  </div>
+
+  <!-- ── Spots grid ─────────────────────────────────────────────────────────── -->
+  <main class="dashboard__grid" aria-label="Puestos de parqueo">
+    @if (filteredSpots().length === 0) {
+      <div class="dashboard__empty">
+        <span class="dashboard__empty-icon">🔍</span>
+        <p>No hay puestos con ese estado.</p>
+      </div>
+    }
+
+    @for (spot of filteredSpots(); track spot.id) {
+      <app-slot-card
+        [spot]="spot"
+        (occupy)="onOccupy($event)"
+        (release)="onRelease($event)"
+        (reserve)="onReserve($event)"
+      />
+    }
+  </main>
+
+</div>
+
+<!-- ── Occupy modal ──────────────────────────────────────────────────────────── -->
+@if (showModal()) {
+  <div class="modal-overlay" (click)="closeModal()" role="dialog" aria-modal="true"
+       [attr.aria-label]="'Ocupar puesto ' + targetSpotNumber">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <header class="modal__header">
+        <h2 class="modal__title">Ocupar puesto <strong>{{ targetSpotNumber }}</strong></h2>
+        <button class="modal__close" (click)="closeModal()" aria-label="Cerrar">✕</button>
+      </header>
+
+      <form [formGroup]="occupyForm" (ngSubmit)="submitOccupy()" class="modal__form" novalidate>
+
+        <!-- QR code -->
+        <div class="form-field" [class.form-field--error]="isFieldInvalid('qrCode')">
+          <label class="form-label" for="qrCode">Código QR del puesto</label>
+          <input
+            id="qrCode"
+            class="form-input"
+            type="text"
+            formControlName="qrCode"
+            placeholder="Escanea o ingresa el código QR"
+            autocomplete="off"
+          />
+          @if (isFieldInvalid('qrCode')) {
+            <span class="form-error">El código QR es obligatorio.</span>
+          }
+        </div>
+
+        <!-- Plate -->
+        <div class="form-field" [class.form-field--error]="isFieldInvalid('plate')">
+          <label class="form-label" for="plate">Placa del vehículo</label>
+          <input
+            id="plate"
+            class="form-input"
+            type="text"
+            formControlName="plate"
+            placeholder="Ej. ABC123"
+            autocomplete="off"
+            style="text-transform: uppercase"
+          />
+          @if (isFieldInvalid('plate')) {
+            <span class="form-error">Ingresa una placa válida (3–8 caracteres).</span>
+          }
+        </div>
+
+        <!-- Server-side validation error -->
+        @if (modalError()) {
+          <div class="form-alert" role="alert">{{ modalError() }}</div>
+        }
+
+        <div class="modal__actions">
+          <button type="button" class="btn btn--ghost" (click)="closeModal()">Cancelar</button>
+          <button type="submit" class="btn btn--primary">Confirmar ocupación</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}
