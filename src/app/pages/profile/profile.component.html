@@ -205,7 +205,7 @@
                   <span class="vehicle-badge">Principal</span>
                 }
               </div>
-              <span class="vehicle-card__desc">{{ v.brand }} {{ v.model }} · {{ v.color }}</span>
+              <span class="vehicle-card__desc">{{ v.brand }}{{ v.model ? ' ' + v.model : '' }}{{ v.color ? ' · ' + v.color : '' }}</span>
             </div>
             <div class="vehicle-card__actions">
               @if (!v.isDefault) {
