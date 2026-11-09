@@ -67,7 +67,7 @@ export class RegisterComponent {
       ],
       studentCode: [
         '',
-        [Validators.required, Validators.pattern(/^\d{4}-\d{2}-\d{3,4}$/)],
+        [Validators.required, Validators.pattern(/^\d{6}$/)],
       ],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       program: ['', Validators.required],
@@ -84,6 +84,22 @@ export class RegisterComponent {
   isInvalid(field: string): boolean {
     const control = this.registerForm.get(field);
     return !!control && control.invalid && control.touched;
+  }
+
+  /** Fuerza mayúsculas en la placa en tiempo real */
+  toUpperPlate(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const upper = input.value.toUpperCase();
+    input.value = upper;
+    this.registerForm.get('vehiclePlate')?.setValue(upper, { emitEvent: false });
+  }
+
+  /** Solo permite dígitos en el código estudiantil */
+  onlyNumbers(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digits = input.value.replace(/\D/g, '').slice(0, 6);
+    input.value = digits;
+    this.registerForm.get('studentCode')?.setValue(digits, { emitEvent: false });
   }
 
   hasPasswordMismatch(): boolean {

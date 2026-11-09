@@ -69,10 +69,13 @@
               id="studentCode"
               type="text"
               formControlName="studentCode"
-              placeholder="2024-03-012"
+              inputmode="numeric"
+              maxlength="6"
+              placeholder="123456"
+              (input)="onlyNumbers($event)"
             />
             @if (isInvalid('studentCode')) {
-              <small>Usa el formato AAAA-MM-###.</small>
+              <small>El código debe tener exactamente 6 dígitos numéricos.</small>
             }
           </div>
 
@@ -150,13 +153,15 @@
           </div>
 
           <div class="register-field">
-            <label for="vehiclePlate">Placa del vehículo <span>(opcional)</span></label>
+            <label for="vehiclePlate">Placa del vehículo</label>
             <input
               id="vehiclePlate"
               type="text"
               formControlName="vehiclePlate"
               autocapitalize="characters"
               placeholder="ABC123"
+              style="text-transform: uppercase"
+              (input)="toUpperPlate($event)"
             />
             @if (isInvalid('vehiclePlate')) {
               <small>Ingresa una placa válida de 5 a 8 caracteres.</small>
