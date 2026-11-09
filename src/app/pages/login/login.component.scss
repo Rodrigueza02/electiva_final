@@ -34,19 +34,14 @@
 
   @media (max-width: 768px) { display: none; }
 
-  &__illustration svg {
-    width: 100%;
-    max-width: 280px;
-    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
-  }
-
   &__brand { text-align: center; }
 
   &__logo {
-    font-size: 2.8rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--space-2);
+    display: block;
+    width: min(320px, 80vw);
+    height: auto;
+    border-radius: var(--radius-md);
+    margin: 0 auto var(--space-2);
   }
 
   &__tagline {
@@ -97,17 +92,6 @@
   }
 }
 
-// ── Logo colours (shared across hero & card) ──────────────────────────────────
-.logo-smart { color: #4CAF50; }
-.logo-park  { color: #fff; }
-.logo-u     { color: #fff; }
-
-// In the right panel the text is dark
-.login-card {
-  .logo-park { color: var(--brand-blue); }
-  .logo-u    { color: var(--brand-blue); }
-}
-
 // ── Right panel ───────────────────────────────────────────────────────────────
 .login-panel {
   background: var(--bg);
@@ -137,10 +121,11 @@
   &__brand { text-align: center; }
 
   &__logo {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--space-1);
+    display: block;
+    width: min(210px, 100%);
+    height: auto;
+    border-radius: var(--radius-sm);
+    margin: 0 auto var(--space-1);
   }
 
   &__tagline {
