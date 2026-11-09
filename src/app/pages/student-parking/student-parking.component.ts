@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 import { ParkingService } from '../../services/parking.service';
 import { ProfileService } from '../../services/profile.service';
 import { ParkingSpot } from '../../models/parking-spot.model';
+import { StudentVehicle } from '../../models/student-profile.model';
 
 type ViewState = 'map' | 'form' | 'success';
 
@@ -49,7 +50,7 @@ export class StudentParkingComponent {
   // ── Default vehicle plate from profile ───────────────────────────────
   private get defaultPlate(): string {
     return (
-      this.profile()?.vehicles.find((v) => v.isDefault)?.plate ?? ''
+      this.profile()?.vehicles.find((v: StudentVehicle) => v.isDefault)?.plate ?? ''
     );
   }
 

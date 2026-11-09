@@ -9,7 +9,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
-import { VehicleType } from '../../models/student-profile.model';
+import { VehicleType, ParkingRecord } from '../../models/student-profile.model';
 
 type ActiveTab = 'info' | 'vehicles' | 'history';
 
@@ -63,7 +63,7 @@ export class ProfileComponent {
   // ── Computed helpers ─────────────────────────────────────────────────────
   readonly totalMinutes = computed(() =>
     (this.profile()?.parkingHistory ?? [])
-      .reduce((acc, r) => acc + (r.durationMinutes ?? 0), 0)
+      .reduce((acc: number, r: ParkingRecord) => acc + (r.durationMinutes ?? 0), 0)
   );
 
   readonly recentHistory = computed(() =>

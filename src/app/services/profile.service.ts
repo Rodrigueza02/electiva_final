@@ -5,8 +5,7 @@ import {
   StudentVehicle,
   VehicleType,
   createEmptyProfile,
-} from '../models/student-profile.model';
-import { AuthService } from './auth.service';
+} from '../models/student-profile.model';import { AuthService } from './auth.service';
 
 const STORAGE_KEY = 'spu-profiles';
 
@@ -145,7 +144,7 @@ export class ProfileService {
       ...map,
       [user.email]: {
         ...map[user.email],
-        vehicles: map[user.email].vehicles.filter((v) => v.id !== id),
+        vehicles: map[user.email].vehicles.filter((v: StudentVehicle) => v.id !== id),
       },
     }));
     this.persist();
@@ -158,7 +157,7 @@ export class ProfileService {
       ...map,
       [user.email]: {
         ...map[user.email],
-        vehicles: map[user.email].vehicles.map((v) => ({
+        vehicles: map[user.email].vehicles.map((v: StudentVehicle) => ({
           ...v,
           isDefault: v.id === id,
         })),
