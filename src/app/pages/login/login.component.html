@@ -74,9 +74,11 @@
             <input
               id="email"
               class="lf-input"
-              type="email"
+              type="text"
               formControlName="email"
               placeholder="ejemplo&#64;ucc.edu.co"
+              inputmode="email"
+              autocapitalize="none"
               autocomplete="email"
             />
           </div>
@@ -155,7 +157,7 @@
 
       <p class="login-card__footer">
         ¿No tienes cuenta?
-        <a href="#" (click)="$event.preventDefault()">Solicita acceso</a>
+        <a routerLink="/register">Crear cuenta</a>
       </p>
 
     </div>
