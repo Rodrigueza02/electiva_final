@@ -1,0 +1,129 @@
+.slot-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    background: var(--border);
+    transition: background 0.2s ease;
+  }
+
+  &[data-status='available']::before { background: var(--status-available); }
+  &[data-status='occupied']::before  { background: var(--status-occupied); }
+  &[data-status='reserved']::before  { background: var(--status-reserved); }
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  // ── Header ─────────────────────────────────────────────────────────────
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.03em;
+  }
+
+  // ── Badge ──────────────────────────────────────────────────────────────
+  &__badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1.5px solid transparent;
+
+    &--available {
+      background: color-mix(in srgb, var(--status-available) 12%, transparent);
+      color: var(--status-available);
+      border-color: color-mix(in srgb, var(--status-available) 30%, transparent);
+    }
+    &--occupied {
+      background: color-mix(in srgb, var(--status-occupied) 12%, transparent);
+      color: var(--status-occupied);
+      border-color: color-mix(in srgb, var(--status-occupied) 30%, transparent);
+    }
+    &--reserved {
+      background: color-mix(in srgb, var(--status-reserved) 12%, transparent);
+      color: var(--status-reserved);
+      border-color: color-mix(in srgb, var(--status-reserved) 30%, transparent);
+    }
+  }
+
+  // ── QR row ─────────────────────────────────────────────────────────────
+  &__qr {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--surface-alt);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  &__qr-icon {
+    font-size: 1.1rem;
+    color: var(--accent);
+  }
+
+  &__qr-code {
+    font-size: 0.75rem;
+    font-family: 'Courier New', monospace;
+    color: var(--text-secondary);
+    word-break: break-all;
+  }
+
+  // ── Info rows (occupied) ───────────────────────────────────────────────
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  &__info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+
+  &__info-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  &__info-value {
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  // ── Actions ────────────────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+}
