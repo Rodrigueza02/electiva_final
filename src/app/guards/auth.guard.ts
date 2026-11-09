@@ -9,7 +9,7 @@ export const authGuard: CanActivateFn = () => {
   return auth.isLoggedIn() ? true : router.createUrlTree(['/login']);
 };
 
-/** Redirige al dashboard si ya tiene sesión */
+/** Redirige al destino correcto si ya tiene sesión */
 export const guestGuard: CanActivateFn = () => {
   const auth   = inject(AuthService);
   const router = inject(Router);
@@ -27,7 +27,6 @@ export function roleGuard(...roles: UserRole[]): CanActivateFn {
     if (!auth.isLoggedIn()) return router.createUrlTree(['/login']);
     const userRole = auth.user()?.role;
     if (userRole && roles.includes(userRole)) return true;
-    // Redirige según el rol que tiene
     return auth.isStudent()
       ? router.createUrlTree(['/parking'])
       : router.createUrlTree(['/dashboard']);

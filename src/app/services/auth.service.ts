@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 
-export type UserRole = 'admin' | 'operator' | 'student';
+export type UserRole = 'admin' | 'student';
 
 export interface AuthUser {
   email: string;
@@ -19,12 +19,6 @@ const DEMO_USERS: Array<AuthUser & { password: string }> = [
     role:     'admin',
   },
   {
-    email:    'operador@ucc.edu.co',
-    password: 'op123',
-    name:     'Operador Parqueo',
-    role:     'operator',
-  },
-  {
     email:    'estudiante@campusucc.edu.co',
     password: 'est123',
     name:     'Estudiante UCC',
@@ -41,11 +35,7 @@ export class AuthService {
   readonly user       = this._user.asReadonly();
   readonly isLoggedIn = computed(() => this._user() !== null);
   readonly isAdmin    = computed(() => this._user()?.role === 'admin');
-  readonly isOperator = computed(() => this._user()?.role === 'operator');
   readonly isStudent  = computed(() => this._user()?.role === 'student');
-  readonly isStaff    = computed(() =>
-    this._user()?.role === 'admin' || this._user()?.role === 'operator'
-  );
 
   login(email: string, password: string): boolean {
     const found = DEMO_USERS.find(

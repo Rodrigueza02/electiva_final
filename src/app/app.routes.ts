@@ -10,7 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    canActivate: [roleGuard('admin', 'operator')],
+    canActivate: [roleGuard('admin')],
     loadComponent: () =>
       import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
