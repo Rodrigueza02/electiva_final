@@ -270,20 +270,6 @@
 }
 
 // ── Form fields (modal) ───────────────────────────────────────────────────────
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.form-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
 .form-input {
   padding: var(--space-3) var(--space-3);
   border: 1.5px solid var(--border);
@@ -306,12 +292,6 @@
   .form-field--error &:focus {
     box-shadow: 0 0 0 3px rgba(239, 83, 80, 0.15);
   }
-}
-
-.form-error {
-  font-size: 0.77rem;
-  color: var(--status-occupied);
-  font-weight: 500;
 }
 
 .form-alert {
