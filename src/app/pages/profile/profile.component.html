@@ -1,0 +1,330 @@
+<div class="profile-page">
+
+  <!-- ── Top bar ──────────────────────────────────────────────────────────── -->
+  <header class="profile-topbar">
+    <a routerLink="/dashboard" class="profile-topbar__back">
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M13 16l-6-6 6-6" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Volver al gestor
+    </a>
+    <div class="profile-topbar__brand">
+      <span class="logo-smart">Smart</span><span class="logo-park">Park</span><span class="logo-u">U</span>
+    </div>
+    <button class="btn btn--ghost btn--sm" (click)="logout()">Cerrar sesión</button>
+  </header>
+
+  <!-- ── Hero card ────────────────────────────────────────────────────────── -->
+  <section class="profile-hero">
+    <div class="profile-hero__avatar">
+      {{ profile()?.avatarInitials ?? user()?.name?.charAt(0) }}
+    </div>
+    <div class="profile-hero__info">
+      <h1 class="profile-hero__name">{{ user()?.name }}</h1>
+      <span class="profile-hero__role">
+        {{ user()?.role === 'admin' ? '🎓 Administrador' : '🎓 Estudiante' }}
+      </span>
+      <span class="profile-hero__email">{{ user()?.email }}</span>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="profile-hero__stats">
+      <div class="hero-stat">
+        <span class="hero-stat__val">{{ profile()?.vehicles?.length ?? 0 }}</span>
+        <span class="hero-stat__lbl">Vehículos</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat__val">{{ profile()?.parkingHistory?.length ?? 0 }}</span>
+        <span class="hero-stat__lbl">Ingresos</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat__val">{{ formatDuration(totalMinutes()) }}</span>
+        <span class="hero-stat__lbl">Tiempo total</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Tabs ─────────────────────────────────────────────────────────────── -->
+  <nav class="profile-tabs" role="tablist">
+    <button class="profile-tab" [class.profile-tab--active]="activeTab() === 'info'"
+            role="tab" (click)="setTab('info')">
+      📋 Información
+    </button>
+    <button class="profile-tab" [class.profile-tab--active]="activeTab() === 'vehicles'"
+            role="tab" (click)="setTab('vehicles')">
+      🚗 Vehículos
+    </button>
+    <button class="profile-tab" [class.profile-tab--active]="activeTab() === 'history'"
+            role="tab" (click)="setTab('history')">
+      📅 Historial
+    </button>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       TAB: INFO
+  ══════════════════════════════════════════════════════════════════════════ -->
+  @if (activeTab() === 'info') {
+    <section class="profile-section">
+
+      <div class="section-header">
+        <h2 class="section-title">Datos académicos</h2>
+        @if (!editingInfo()) {
+          <button class="btn btn--outline btn--sm" (click)="startEdit()">
+            ✏️ Editar
+          </button>
+        }
+      </div>
+
+      <!-- View mode -->
+      @if (!editingInfo()) {
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Código estudiantil</span>
+            <span class="info-value">{{ profile()?.code || '—' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Programa</span>
+            <span class="info-value">{{ profile()?.program || '—' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Semestre</span>
+            <span class="info-value">{{ profile()?.semester || '—' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Sede</span>
+            <span class="info-value">{{ profile()?.campus || '—' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Teléfono</span>
+            <span class="info-value">{{ profile()?.phone || '—' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Correo institucional</span>
+            <span class="info-value">{{ user()?.email }}</span>
+          </div>
+        </div>
+      }
+
+      <!-- Edit mode -->
+      @if (editingInfo()) {
+        <form [formGroup]="infoForm" (ngSubmit)="saveInfo()" class="info-form" novalidate>
+          <div class="form-row">
+            <div class="form-field" [class.form-field--error]="isInvalid(infoForm, 'code')">
+              <label class="form-label" for="code">Código estudiantil</label>
+              <input id="code" class="form-input" type="text" formControlName="code"
+                     placeholder="2023-10-0421" />
+              @if (isInvalid(infoForm, 'code')) {
+                <span class="form-error">Campo requerido.</span>
+              }
+            </div>
+            <div class="form-field" [class.form-field--error]="isInvalid(infoForm, 'program')">
+              <label class="form-label" for="program">Programa</label>
+              <input id="program" class="form-input" type="text" formControlName="program"
+                     placeholder="Ingeniería de Sistemas" />
+              @if (isInvalid(infoForm, 'program')) {
+                <span class="form-error">Campo requerido.</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field" [class.form-field--error]="isInvalid(infoForm, 'semester')">
+              <label class="form-label" for="semester">Semestre</label>
+              <input id="semester" class="form-input" type="number" formControlName="semester"
+                     min="1" max="10" />
+              @if (isInvalid(infoForm, 'semester')) {
+                <span class="form-error">Entre 1 y 10.</span>
+              }
+            </div>
+            <div class="form-field" [class.form-field--error]="isInvalid(infoForm, 'campus')">
+              <label class="form-label" for="campus">Sede</label>
+              <select id="campus" class="form-input form-select" formControlName="campus">
+                <option value="Pasto">Pasto</option>
+                <option value="Bogotá">Bogotá</option>
+                <option value="Medellín">Medellín</option>
+                <option value="Cali">Cali</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field" [class.form-field--error]="isInvalid(infoForm, 'phone')">
+              <label class="form-label" for="phone">Teléfono</label>
+              <input id="phone" class="form-input" type="tel" formControlName="phone"
+                     placeholder="3001234567" />
+              @if (isInvalid(infoForm, 'phone')) {
+                <span class="form-error">Ingresa un número válido (7–10 dígitos).</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn--ghost" (click)="cancelEdit()">Cancelar</button>
+            <button type="submit" class="btn btn--primary" [disabled]="savingInfo()">
+              @if (savingInfo()) { <span class="lf-spinner"></span> Guardando... }
+              @else { Guardar cambios }
+            </button>
+          </div>
+        </form>
+      }
+
+    </section>
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       TAB: VEHÍCULOS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  @if (activeTab() === 'vehicles') {
+    <section class="profile-section">
+
+      <div class="section-header">
+        <h2 class="section-title">Mis vehículos</h2>
+        <button class="btn btn--primary btn--sm" (click)="openAddVehicle()">
+          + Agregar vehículo
+        </button>
+      </div>
+
+      <!-- Vehicle list -->
+      @if ((profile()?.vehicles ?? []).length === 0) {
+        <div class="empty-state">
+          <span class="empty-state__icon">🚗</span>
+          <p>No tienes vehículos registrados.</p>
+          <button class="btn btn--primary" (click)="openAddVehicle()">Registrar vehículo</button>
+        </div>
+      }
+
+      <div class="vehicle-list">
+        @for (v of profile()?.vehicles ?? []; track v.id) {
+          <div class="vehicle-card" [class.vehicle-card--default]="v.isDefault">
+            <div class="vehicle-card__icon">{{ vehicleIcon(v.type) }}</div>
+            <div class="vehicle-card__body">
+              <div class="vehicle-card__top">
+                <span class="vehicle-card__plate">{{ v.plate }}</span>
+                @if (v.isDefault) {
+                  <span class="vehicle-badge">Principal</span>
+                }
+              </div>
+              <span class="vehicle-card__desc">{{ v.brand }} {{ v.model }} · {{ v.color }}</span>
+            </div>
+            <div class="vehicle-card__actions">
+              @if (!v.isDefault) {
+                <button class="btn btn--ghost btn--xs" (click)="setDefault(v.id)"
+                        title="Marcar como principal">⭐</button>
+              }
+              <button class="btn btn--danger btn--xs" (click)="removeVehicle(v.id)"
+                      title="Eliminar vehículo">🗑</button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Add vehicle form (inline) -->
+      @if (showAddVehicle()) {
+        <div class="add-vehicle-panel">
+          <h3 class="add-vehicle-panel__title">Nuevo vehículo</h3>
+          <form [formGroup]="vehicleForm" (ngSubmit)="saveVehicle()" novalidate>
+
+            <!-- Type selector -->
+            <div class="type-selector">
+              @for (t of vehicleTypes; track t.value) {
+                <button type="button"
+                        class="type-btn"
+                        [class.type-btn--active]="vehicleForm.get('type')?.value === t.value"
+                        (click)="vehicleForm.get('type')?.setValue(t.value)">
+                  {{ t.icon }} {{ t.label }}
+                </button>
+              }
+            </div>
+
+            <div class="form-row">
+              <div class="form-field" [class.form-field--error]="isInvalid(vehicleForm, 'plate')">
+                <label class="form-label">Placa</label>
+                <input class="form-input" type="text" formControlName="plate"
+                       placeholder="ABC123" style="text-transform:uppercase" />
+                @if (isInvalid(vehicleForm, 'plate')) {
+                  <span class="form-error">Placa inválida (3–8 caracteres).</span>
+                }
+              </div>
+              <div class="form-field" [class.form-field--error]="isInvalid(vehicleForm, 'brand')">
+                <label class="form-label">Marca</label>
+                <input class="form-input" type="text" formControlName="brand" placeholder="Mazda" />
+                @if (isInvalid(vehicleForm, 'brand')) {
+                  <span class="form-error">Campo requerido.</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field" [class.form-field--error]="isInvalid(vehicleForm, 'model')">
+                <label class="form-label">Modelo</label>
+                <input class="form-input" type="text" formControlName="model" placeholder="CX-5" />
+                @if (isInvalid(vehicleForm, 'model')) {
+                  <span class="form-error">Campo requerido.</span>
+                }
+              </div>
+              <div class="form-field" [class.form-field--error]="isInvalid(vehicleForm, 'color')">
+                <label class="form-label">Color</label>
+                <input class="form-input" type="text" formControlName="color" placeholder="Gris" />
+                @if (isInvalid(vehicleForm, 'color')) {
+                  <span class="form-error">Campo requerido.</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn--ghost" (click)="cancelAddVehicle()">Cancelar</button>
+              <button type="submit" class="btn btn--primary">Registrar</button>
+            </div>
+          </form>
+        </div>
+      }
+
+    </section>
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       TAB: HISTORIAL
+  ══════════════════════════════════════════════════════════════════════════ -->
+  @if (activeTab() === 'history') {
+    <section class="profile-section">
+
+      <div class="section-header">
+        <h2 class="section-title">Historial de ingresos</h2>
+        <span class="section-count">{{ profile()?.parkingHistory?.length ?? 0 }} registros</span>
+      </div>
+
+      @if ((profile()?.parkingHistory ?? []).length === 0) {
+        <div class="empty-state">
+          <span class="empty-state__icon">📅</span>
+          <p>Aún no tienes ingresos registrados.</p>
+        </div>
+      }
+
+      <div class="history-list">
+        @for (rec of recentHistory(); track rec.id) {
+          <div class="history-item">
+            <div class="history-item__spot">{{ rec.spotNumber }}</div>
+            <div class="history-item__body">
+              <span class="history-item__plate">🚗 {{ rec.vehiclePlate }}</span>
+              <span class="history-item__time">
+                {{ formatDate(rec.entryTime) }}
+                @if (rec.exitTime) { → {{ formatDate(rec.exitTime) }} }
+                @else { <span class="badge-active">Activo</span> }
+              </span>
+            </div>
+            <div class="history-item__duration">
+              @if (rec.durationMinutes) {
+                {{ formatDuration(rec.durationMinutes) }}
+              } @else {
+                En curso
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+    </section>
+  }
+
+</div>
