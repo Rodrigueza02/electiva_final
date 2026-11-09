@@ -34,16 +34,14 @@
   }
 
   &__brand {
-    font-size: 1.2rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    img {
+      display: block;
+      width: 120px;
+      height: auto;
+      border-radius: var(--radius-sm);
+    }
   }
 }
-
-// Logo colours (re-used from global)
-.logo-smart { color: var(--brand-green); }
-.logo-park  { color: var(--brand-blue); }
-.logo-u     { color: var(--brand-blue); }
 
 // ── Hero card ─────────────────────────────────────────────────────────────
 .profile-hero {
