@@ -184,28 +184,6 @@ export class ProfileService {
     this.persist();
   }
 
-  // ── Register full profile on sign-up ─────────────────────────────────────
-  registerStudentProfile(data: {
-    email: string; name: string; code: string; phone: string;
-    program: string; semester: number; vehiclePlate: string; vehicleType: VehicleType;
-  }): void {
-    const parts = data.name.trim().split(' ');
-    const initials = parts.length >= 2
-      ? (parts[0][0] + parts[1][0]).toUpperCase()
-      : parts[0].substring(0, 2).toUpperCase();
-    const vehicles: StudentVehicle[] = data.vehiclePlate
-      ? [{ id: `v-${Date.now()}`, plate: data.vehiclePlate.toUpperCase(),
-           brand: '', model: '', color: '', type: data.vehicleType, isDefault: true }]
-      : [];
-    const profile: StudentProfile = {
-      userId: data.email, code: data.code, program: data.program,
-      semester: data.semester, campus: 'Pasto', phone: data.phone,
-      avatarInitials: initials, vehicles, parkingHistory: [],
-    };
-    this._profiles.update((map) => ({ ...map, [data.email]: profile }));
-    this.persist();
-  }
-
   // ── Ensure a profile exists for the logged-in user ───────────────────────
   ensureProfile(email: string, name: string): void {
     if (!this._profiles()[email]) {
@@ -215,6 +193,40 @@ export class ProfileService {
       }));
       this.persist();
     }
+  }
+
+  registerStudentProfile(details: {
+    email: string;
+    name: string;
+    code: string;
+    phone: string;
+    program: string;
+    semester: number;
+    vehiclePlate: string;
+    vehicleType: VehicleType;
+  }): void {
+    const email = details.email.trim().toLowerCase();
+    const profile = createEmptyProfile(email, details.name);
+    profile.code = details.code.trim();
+    profile.phone = details.phone.trim();
+    profile.program = details.program.trim();
+    profile.semester = details.semester;
+
+    const plate = details.vehiclePlate.trim().toUpperCase();
+    if (plate) {
+      profile.vehicles.push({
+        id: `v-${Date.now()}`,
+        plate,
+        brand: details.vehicleType === 'car' ? 'Carro' : 'Moto',
+        model: '',
+        color: '',
+        type: details.vehicleType,
+        isDefault: true,
+      });
+    }
+
+    this._profiles.update((map) => ({ ...map, [email]: profile }));
+    this.persist();
   }
 
   // ── Persistence ──────────────────────────────────────────────────────────

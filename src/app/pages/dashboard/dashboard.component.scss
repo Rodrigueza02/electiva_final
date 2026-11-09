@@ -30,21 +30,12 @@
   gap: var(--space-3);
 }
 
-.dashboard__brand-icon {
-  font-size: 2.4rem;
-  line-height: 1;
-}
-
-.dashboard__title {
-  font-size: 1.75rem;
-  font-weight: 800;
-  margin: 0;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-
-  span.smart { color: var(--brand-green); }
-  span.park  { color: var(--brand-blue); }
-  span.u     { color: var(--brand-blue); }
+.dashboard__brand-logo {
+  display: block;
+  width: 160px;
+  height: auto;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
 }
 
 .dashboard__subtitle {
@@ -279,20 +270,6 @@
 }
 
 // ── Form fields (modal) ───────────────────────────────────────────────────────
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.form-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
 .form-input {
   padding: var(--space-3) var(--space-3);
   border: 1.5px solid var(--border);
@@ -315,12 +292,6 @@
   .form-field--error &:focus {
     box-shadow: 0 0 0 3px rgba(239, 83, 80, 0.15);
   }
-}
-
-.form-error {
-  font-size: 0.77rem;
-  color: var(--status-occupied);
-  font-weight: 500;
 }
 
 .form-alert {

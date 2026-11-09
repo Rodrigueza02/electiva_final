@@ -10,7 +10,7 @@
       Volver al gestor
     </a>
     <div class="profile-topbar__brand">
-      <span class="logo-smart">Smart</span><span class="logo-park">Park</span><span class="logo-u">U</span>
+      <img src="/assets/logo.png" alt="SmartParkU" />
     </div>
     <button class="btn btn--ghost btn--sm" (click)="logout()">Cerrar sesión</button>
   </header>
@@ -205,7 +205,7 @@
                   <span class="vehicle-badge">Principal</span>
                 }
               </div>
-              <span class="vehicle-card__desc">{{ v.brand }} {{ v.model }} · {{ v.color }}</span>
+              <span class="vehicle-card__desc">{{ v.brand }}{{ v.model ? ' ' + v.model : '' }}{{ v.color ? ' · ' + v.color : '' }}</span>
             </div>
             <div class="vehicle-card__actions">
               @if (!v.isDefault) {

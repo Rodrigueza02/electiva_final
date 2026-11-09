@@ -21,9 +21,12 @@
   gap: var(--space-3);
 
   &__brand {
-    font-size: 1.4rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    img {
+      display: block;
+      width: 128px;
+      height: auto;
+      border-radius: var(--radius-sm);
+    }
   }
 
   &__right {
@@ -394,20 +397,6 @@
   gap: var(--space-4);
 }
 
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.form-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-secondary);
-}
-
 .form-input-wrap {
   display: flex;
   align-items: center;
@@ -441,14 +430,6 @@
   color: var(--text-primary);
   outline: none;
   &::placeholder { color: var(--text-muted); }
-}
-
-.form-error { font-size: 0.76rem; color: var(--status-occupied); font-weight: 500; }
-
-.form-hint {
-  font-size: 0.74rem;
-  color: var(--text-muted);
-  font-style: italic;
 }
 
 // ── Vehicle chips ─────────────────────────────────────────────────────────
@@ -647,6 +628,3 @@
   justify-content: center;
   margin-top: var(--space-2);
 }
-
-// ── Shared button size ────────────────────────────────────────────────────
-.btn--sm { padding: var(--space-2) var(--space-3); font-size: 0.8rem; }

@@ -40,21 +40,6 @@
     filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
   }
 
-  &__brand { text-align: center; }
-
-  &__logo {
-    font-size: 2.8rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--space-2);
-  }
-
-  &__tagline {
-    font-size: 1rem;
-    opacity: 0.85;
-    font-weight: 400;
-  }
-
   &__stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -97,17 +82,6 @@
   }
 }
 
-// ── Logo colours (shared across hero & card) ──────────────────────────────────
-.logo-smart { color: #4CAF50; }
-.logo-park  { color: #fff; }
-.logo-u     { color: #fff; }
-
-// In the right panel the text is dark
-.login-card {
-  .logo-park { color: var(--brand-blue); }
-  .logo-u    { color: var(--brand-blue); }
-}
-
 // ── Right panel ───────────────────────────────────────────────────────────────
 .login-panel {
   background: var(--bg);
@@ -137,10 +111,11 @@
   &__brand { text-align: center; }
 
   &__logo {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--space-1);
+    display: block;
+    width: min(210px, 100%);
+    height: auto;
+    border-radius: var(--radius-sm);
+    margin: 0 auto var(--space-1);
   }
 
   &__tagline {
@@ -346,18 +321,4 @@
   &:active:not(:disabled) { transform: translateY(0); }
 
   &:disabled { opacity: 0.65; cursor: not-allowed; }
-}
-
-// ── Loading spinner ───────────────────────────────────────────────────────────
-.lf-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255,255,255,0.35);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }

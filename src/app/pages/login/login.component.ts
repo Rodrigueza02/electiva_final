@@ -56,7 +56,7 @@ export class LoginComponent {
     await new Promise((r) => setTimeout(r, 400));
 
     const { email, password } = this.loginForm.value as { email: string; password: string };
-    const ok = this.auth.login(email, password);
+    const ok = await this.auth.login(email, password);
 
     if (ok) {
       this.router.navigate(['/dashboard']);
