@@ -1,0 +1,174 @@
+<div class="login-layout">
+
+  <!-- ── Left hero panel ──────────────────────────────────────────────────── -->
+  <aside class="login-hero" aria-hidden="true">
+    <!-- Car SVG illustration -->
+    <div class="login-hero__illustration">
+      <svg viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- dashed border -->
+        <rect x="8" y="8" width="204" height="114" rx="16" stroke="rgba(255,255,255,0.4)"
+              stroke-width="2" stroke-dasharray="10 6"/>
+        <!-- car body -->
+        <ellipse cx="110" cy="88" rx="72" ry="16" fill="rgba(0,0,0,0.15)"/>
+        <rect x="44" y="58" width="132" height="38" rx="10" fill="#2ccb84"/>
+        <!-- roof -->
+        <path d="M74 58 Q82 28 138 28 Q158 28 166 58Z" fill="#25b876"/>
+        <!-- windows -->
+        <path d="M80 58 Q86 36 110 36 Q128 36 132 58Z" fill="rgba(255,255,255,0.35)"/>
+        <!-- wheels -->
+        <circle cx="76"  cy="96" r="12" fill="#0d2a4a"/>
+        <circle cx="76"  cy="96" r="6"  fill="#e8f4fd"/>
+        <circle cx="144" cy="96" r="12" fill="#0d2a4a"/>
+        <circle cx="144" cy="96" r="6"  fill="#e8f4fd"/>
+        <!-- UCC label -->
+        <text x="110" y="78" text-anchor="middle" font-size="13" font-weight="700"
+              fill="rgba(255,255,255,0.9)" font-family="Inter, sans-serif">UCC</text>
+        <!-- leaves decoration -->
+        <ellipse cx="28"  cy="70" rx="14" ry="7" fill="rgba(255,255,255,0.18)" transform="rotate(-30 28 70)"/>
+        <ellipse cx="192" cy="70" rx="14" ry="7" fill="rgba(255,255,255,0.18)" transform="rotate(30 192 70)"/>
+      </svg>
+    </div>
+
+    <!-- Brand title -->
+    <div class="login-hero__brand">
+      <h1 class="login-hero__logo">
+        <span class="logo-smart">Smart</span><span class="logo-park">Park</span><span class="logo-u">U</span>
+      </h1>
+      <p class="login-hero__tagline">Parqueo inteligente para la comunidad UCC</p>
+    </div>
+
+    <!-- Stats grid -->
+    <div class="login-hero__stats">
+      @for (stat of stats; track stat.value) {
+        <div class="hero-stat">
+          <span class="hero-stat__value">{{ stat.value }}</span>
+          <span class="hero-stat__label">{{ stat.label }}</span>
+        </div>
+      }
+    </div>
+
+    <footer class="login-hero__footer">
+      UNIVERSIDAD COOPERATIVA DE COLOMBIA — PASTO
+    </footer>
+  </aside>
+
+  <!-- ── Right form panel ─────────────────────────────────────────────────── -->
+  <main class="login-panel">
+    <div class="login-card">
+
+      <!-- Card brand -->
+      <div class="login-card__brand">
+        <h2 class="login-card__logo">
+          <span class="logo-smart">Smart</span><span class="logo-park">Park</span><span class="logo-u">U</span>
+        </h2>
+        <p class="login-card__tagline">Ingresa a tu campus inteligente</p>
+        <div class="login-card__divider"></div>
+      </div>
+
+      <!-- Error alert -->
+      @if (errorMsg()) {
+        <div class="login-alert" role="alert">{{ errorMsg() }}</div>
+      }
+
+      <!-- Form -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate class="login-form">
+
+        <!-- Email -->
+        <div class="lf-field" [class.lf-field--error]="isInvalid('email')">
+          <label class="lf-label" for="email">Correo Institucional</label>
+          <div class="lf-input-wrap">
+            <svg class="lf-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M2 5l8 5 8-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <input
+              id="email"
+              class="lf-input"
+              type="email"
+              formControlName="email"
+              placeholder="ejemplo&#64;ucc.edu.co"
+              autocomplete="email"
+            />
+          </div>
+          @if (isInvalid('email')) {
+            <span class="lf-error">Ingresa un correo institucional válido.</span>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="lf-field" [class.lf-field--error]="isInvalid('password')">
+          <label class="lf-label" for="password">Contraseña</label>
+          <div class="lf-input-wrap">
+            <svg class="lf-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="4" y="9" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 9V6a3 3 0 0 1 6 0v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input
+              id="password"
+              class="lf-input"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+            />
+            <button type="button" class="lf-eye" (click)="togglePassword()"
+                    [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+              @if (showPassword()) {
+                <!-- eye-off -->
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M2 2l16 16M7.5 7.6A4 4 0 0 0 10 14a4 4 0 0 0 3.9-3.1M4.2 4.3C2.8 5.5 1.7 7.1 1 10c1.5 5 7 7 9 7 1.8 0 3.5-.6 4.8-1.7"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M10 6a4 4 0 0 1 4 4c0 .4-.1.8-.2 1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              } @else {
+                <!-- eye -->
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M1 10s3-6 9-6 9 6 9 6-3 6-9 6-9-6-9-6z" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              }
+            </button>
+          </div>
+          @if (isInvalid('password')) {
+            <span class="lf-error">La contraseña debe tener al menos 4 caracteres.</span>
+          }
+        </div>
+
+        <!-- Community row -->
+        <div class="lf-community">
+          <div class="lf-community__info">
+            <div class="lf-community__icon">🏛</div>
+            <span>Comunidad<br/><strong>UCC</strong></span>
+          </div>
+          <div class="lf-toggle lf-toggle--on" aria-label="Comunidad UCC activa">
+            <span class="lf-toggle__thumb"></span>
+            <span class="lf-toggle__label">UCC</span>
+          </div>
+          <a href="#" class="lf-forgot" (click)="$event.preventDefault()">
+            ¿Olvidaste tu clave?
+          </a>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="lf-submit" [disabled]="loading()">
+          @if (loading()) {
+            <span class="lf-spinner"></span> Verificando...
+          } @else {
+            Entrar al Campus
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style="width:18px;height:18px">
+              <path d="M5 10h10M11 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          }
+        </button>
+
+      </form>
+
+      <p class="login-card__footer">
+        ¿No tienes cuenta?
+        <a href="#" (click)="$event.preventDefault()">Solicita acceso</a>
+      </p>
+
+    </div>
+  </main>
+
+</div>
