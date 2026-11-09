@@ -1,0 +1,49 @@
+import { Injectable, signal, computed } from '@angular/core';
+
+export interface AuthUser {
+  email: string;
+  name: string;
+  role: 'admin' | 'operator';
+  /** Optional photo URL — falls back to initials avatar */
+  photoUrl?: string;
+}
+
+// Demo credentials — replace with a real backend call in production
+const DEMO_USERS: Array<AuthUser & { password: string }> = [
+  { email: 'admin@ucc.edu.co',    password: 'admin123', name: 'Administrador UCC', role: 'admin' },
+  { email: 'operador@ucc.edu.co', password: 'op123',    name: 'Operador Parqueo',  role: 'operator' },
+];
+
+const SESSION_KEY = 'spu-session';
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private readonly _user = signal<AuthUser | null>(this.loadSession());
+
+  readonly user       = this._user.asReadonly();
+  readonly isLoggedIn = computed(() => this._user() !== null);
+
+  login(email: string, password: string): boolean {
+    const found = DEMO_USERS.find(
+      (u) => u.email === email.trim().toLowerCase() && u.password === password
+    );
+    if (!found) return false;
+
+    const { password: _pw, ...user } = found;
+    this._user.set(user);
+    try { localStorage.setItem(SESSION_KEY, JSON.stringify(user)); } catch { /* noop */ }
+    return true;
+  }
+
+  logout(): void {
+    this._user.set(null);
+    try { localStorage.removeItem(SESSION_KEY); } catch { /* noop */ }
+  }
+
+  private loadSession(): AuthUser | null {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      return raw ? (JSON.parse(raw) as AuthUser) : null;
+    } catch { return null; }
+  }
+}
