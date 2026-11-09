@@ -251,28 +251,6 @@
   gap: var(--space-4);
 }
 
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
-
-  @media (max-width: 500px) { grid-template-columns: 1fr; }
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.form-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-secondary);
-}
-
 .form-input {
   padding: var(--space-3);
   border: 1.5px solid var(--border);
@@ -295,19 +273,6 @@
 }
 
 .form-select { cursor: pointer; }
-
-.form-error {
-  font-size: 0.76rem;
-  color: var(--status-occupied);
-  font-weight: 500;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-3);
-  padding-top: var(--space-2);
-}
 
 // ── Vehicle list ──────────────────────────────────────────────────────────
 .vehicle-list {
@@ -490,18 +455,3 @@
   &__icon { font-size: 2.4rem; }
   p { margin: 0; font-size: 0.92rem; }
 }
-
-// ── Button size variants ──────────────────────────────────────────────────
-.btn--sm  { padding: var(--space-2) var(--space-3); font-size: 0.8rem; }
-.btn--xs  { padding: 4px var(--space-2); font-size: 0.78rem; }
-
-// ── Spinner (reused from login) ───────────────────────────────────────────
-.lf-spinner {
-  width: 14px; height: 14px;
-  border: 2px solid rgba(255,255,255,0.35);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  display: inline-block;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
