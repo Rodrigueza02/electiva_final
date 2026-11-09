@@ -195,6 +195,40 @@ export class ProfileService {
     }
   }
 
+  registerStudentProfile(details: {
+    email: string;
+    name: string;
+    code: string;
+    phone: string;
+    program: string;
+    semester: number;
+    vehiclePlate: string;
+    vehicleType: VehicleType;
+  }): void {
+    const email = details.email.trim().toLowerCase();
+    const profile = createEmptyProfile(email, details.name);
+    profile.code = details.code.trim();
+    profile.phone = details.phone.trim();
+    profile.program = details.program.trim();
+    profile.semester = details.semester;
+
+    const plate = details.vehiclePlate.trim().toUpperCase();
+    if (plate) {
+      profile.vehicles.push({
+        id: `v-${Date.now()}`,
+        plate,
+        brand: details.vehicleType === 'car' ? 'Carro' : 'Moto',
+        model: '',
+        color: '',
+        type: details.vehicleType,
+        isDefault: true,
+      });
+    }
+
+    this._profiles.update((map) => ({ ...map, [email]: profile }));
+    this.persist();
+  }
+
   // ── Persistence ──────────────────────────────────────────────────────────
   private persist(): void {
     try {
