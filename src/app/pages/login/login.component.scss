@@ -34,6 +34,12 @@
 
   @media (max-width: 768px) { display: none; }
 
+  &__illustration svg {
+    width: 100%;
+    max-width: 280px;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
+  }
+
   &__brand { text-align: center; }
 
   &__logo {
